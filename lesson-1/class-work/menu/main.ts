@@ -16,13 +16,18 @@ const menuList: IMenuItem[] = [
 function generateMenu(list: IMenuItem[]): string {
     let content: string = `<ul>`;
     for (const a of list) {
-        content += `<li><a class='title'>${a.title}</a><ul>`;
-        for (const item of a.items) {
-            content += `<li><a>${item}</a></li>`;
+        if (a.items && a.title) {
+            content += `<li><a class='title'>${a.title}</a>`;
+            content += generateMenu(a.items);
+        } else {
+            return content;
         }
-        content += `</li></ul>`;
+        for (const item of a.items) {
+            if (content.indexOf(item.title) !== -1) break;
+            content += `<li><a>${item.title}</a></li>`;
+        }
+        content += `</ul></li>`;
     }
-    content += `</ul>`;
     return content;
 }
 
